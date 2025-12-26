@@ -233,5 +233,17 @@ public class ProfilePage {
             return false;
         }
     }
+
+    public void clickLogout() {
+        clickLogoutButton();
+    }
+
+    public boolean isLogoutButtonVisible() {
+        return isLogoutButtonDisplayed();
+    }
+
+    public String getCurrentUsername() {
+        return getUserEmailText();
+    }
 }
 

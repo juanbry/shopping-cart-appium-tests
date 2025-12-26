@@ -21,17 +21,16 @@ public class LoginSteps {
 
     @Before
     public void setUp(){
-        System.out.println("INICIANDO DRIVER y PAGE OBJECTS");
         driver = AppiumConfig.getDriver();
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
-        System.out.println("DRIVER INICIADO: " + (driver!=null));
-        System.out.println("LOGIN PAGE INICIADO:" + (loginPage!=null));
+        assertNotNull(driver, "El driver no fue inicializado");
+        assertNotNull(loginPage, "LoginPage no fue inicializada");
+        assertNotNull(homePage, "HomePage no fue inicializada");
     }
 
     @After
     public void tearDown(){
-        System.out.println("CERRANDO DRIVER");
         AppiumConfig.quitDriver();
         driver = null;
         loginPage = null;
@@ -40,7 +39,7 @@ public class LoginSteps {
 
     @Given("que el usuario esta en la pantalla de login")
     public void queElUsuarioEstaEnLaPantallaDeLogin(){
-        System.out.println("USUARIO EN PANTALLA LOGIN");
+        assertTrue(loginPage.isLoginPageDisplayed(), "No se está en la pantalla de login");
     }
 
     @When("ingresa el email {string}")
@@ -60,12 +59,10 @@ public class LoginSteps {
 
     @Then("deberia acceder a la pantalla principal")
     public void deberiaAccederALaPantallaPrincipal(){
-        System.out.println("VALIDANDO ACCESO PANTALLA PRINCIPAL");
         try {
-            Thread.sleep(2000);
+            Thread.sleep(2000); // Esperar a que cargue la pantalla
             assertTrue(homePage.isHomePageDisplayed(),
                     "No se pudo acceder a la pantalla principal");
-            System.out.println("✅ Acceso a pantalla principal validado");
         } catch (Exception e) {
             fail("Error al validar acceso a pantalla principal: " + e.getMessage());
         }
@@ -73,14 +70,12 @@ public class LoginSteps {
 
     @Then("deberia ver un mensaje de error")
     public void deberiaVerUnMensajeDeError(){
-        System.out.println("VALIDANDO MENSAJE DE ERROR");
         try {
-            Thread.sleep(1500); 
+            Thread.sleep(1500); // Esperar a que aparezca el error
             assertFalse(homePage.isHomePageDisplayed(),
                     "No debería haber accedido a la pantalla principal");
             assertTrue(loginPage.isErrorMessageDisplayed(),
                     "No se muestra mensaje de error");
-            System.out.println("Mensaje de error validado");
         } catch (Exception e) {
             fail("Error al validar mensaje de error: " + e.getMessage());
         }
